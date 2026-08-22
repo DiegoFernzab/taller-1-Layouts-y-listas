@@ -6,16 +6,12 @@ plugins {
 
 android {
     namespace = "com.example.tallerlayoutsylistas"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.example.tallerlayoutsylistas"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 37
         versionCode = 1
         versionName = "1.0"
 
@@ -55,8 +51,9 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
 
-    // Navigation Compose
-    implementation(libs.androidx.navigation.compose)
+    // Navigation 3
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
 
     // Ktor
     implementation(libs.ktor.client.core)
