@@ -5,15 +5,31 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.ui.NavDisplay
 import com.example.tallerlayoutsylistas.data.remote.api.KtorApiClient
+import com.example.tallerlayoutsylistas.data.remote.model.User
+import com.example.tallerlayoutsylistas.ui.navigation.DetailRoute
+import com.example.tallerlayoutsylistas.ui.navigation.ListRoute
+import com.example.tallerlayoutsylistas.ui.screens.DetailScreen
+import com.example.tallerlayoutsylistas.ui.screens.ListScreen
 import com.example.tallerlayoutsylistas.ui.theme.TallerLayoutsYListasTheme
 
 class MainActivity : ComponentActivity() {
@@ -21,45 +37,69 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            TallerLayoutsYListasTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+            App()
+        }
+    }
+}
 
-                    // TODO (TEMPORAL): prueba del cliente — borrar cuando Persona B integre la UI
-                    val apiClient = KtorApiClient()
-                    LaunchedEffect(key1 = Unit) {
-                        val result = apiClient.getUsers()
-                        result
-                            .onSuccess { users ->
-                                Log.d("KtorTest", "✅ Usuarios obtenidos: ${users.size}")
-                                Log.d("KtorTest", "Primer usuario: ${users.first().firstName} ${users.first().lastName}")
-                            }
-                            .onFailure { error ->
-                                Log.e("KtorTest", "❌ Error: ${error.message}")
-                            }
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun App() {
+    // Arranca siguiendo al sistema, pero el switch manda a partir de ahí.
+    val systemDark = isSystemInDarkTheme()
+    var darkTheme by rememberSaveable { mutableStateOf(systemDark) }
+
+    TallerLayoutsYListasTheme(darkTheme = darkTheme) {
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            topBar = {
+                TopAppBar(
+                    title = { Text(text = "Usuarios") },
+                    actions = {
+                        Switch(
+                            checked = darkTheme,
+                            onCheckedChange = { darkTheme = it }
+                        )
                     }
-
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                )
             }
+        ) { innerPadding ->
+            AppContent(modifier = Modifier.padding(innerPadding))
         }
     }
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
+fun AppContent(modifier: Modifier = Modifier) {
+    // Estado: la lista que se le pasa a las pantallas. Empieza vacía.
+    var users by remember { mutableStateOf<List<User>>(emptyList()) }
 
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    TallerLayoutsYListasTheme {
-        Greeting("Android")
+    // Pila de navegación: arranca en la lista. Añadir = ir; quitar = volver.
+    val backStack = rememberNavBackStack(ListRoute)
+
+    // Se ejecuta una sola vez y llena el estado con lo que responda la API.
+    LaunchedEffect(Unit) {
+        KtorApiClient().getUsers()
+            .onSuccess { users = it }
+            .onFailure { Log.e("MainActivity", "Error: ${it.message}") }
     }
+
+    NavDisplay(
+        backStack = backStack,
+        modifier = modifier,
+        entryProvider = entryProvider {
+            entry<ListRoute> {
+                ListScreen(
+                    users = users,
+                    onUserClick = { user -> backStack.add(DetailRoute(user.id)) }
+                )
+            }
+            entry<DetailRoute> { route ->
+                val user = users.find { it.id == route.userId }
+                if (user != null) {
+                    DetailScreen(user = user)
+                }
+            }
+        }
+    )
 }

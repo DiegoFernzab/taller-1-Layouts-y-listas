@@ -36,8 +36,9 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun TallerLayoutsYListasTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    // Dynamic color (colores del fondo de pantalla, Android 12+) apagado
+    // para que se use la paleta propia de Color.kt.
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
