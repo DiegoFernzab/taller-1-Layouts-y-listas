@@ -42,7 +42,7 @@ class KtorApiClient {
     suspend fun getUsers(): Result<List<User>> {
         return try {
             val response: UsersResponse = client
-                .get("user")
+                .get("users")
                 .body()
             Result.success(response.users)
         } catch (e: Exception) {
