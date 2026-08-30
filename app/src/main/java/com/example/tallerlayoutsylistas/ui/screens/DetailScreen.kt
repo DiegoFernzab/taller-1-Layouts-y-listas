@@ -1,5 +1,6 @@
 package com.example.tallerlayoutsylistas.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,7 +11,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -57,26 +57,32 @@ fun DetailScreen(
         DetailRow(label = "Empresa", value = user.company.name)
         DetailRow(label = "Cargo", value = user.role)
         DetailRow(label = "Email", value = user.email)
-        DetailRow(label = "Teléfono", value = user.phone)
+        DetailRow(
+            label = "Teléfono",
+            value = user.phone,
+            onClick = { launchDialer(context, user.phone) }
+        )
         DetailRow(label = "Género", value = user.gender)
         DetailRow(label = "Nacimiento", value = user.birthDate)
         DetailRow(label = "Color de ojos", value = user.eyeColor)
         DetailRow(label = "Universidad", value = user.university)
 
-        Button(
-            onClick = { launchDialer(context, user.phone) },
-            modifier = Modifier.padding(top = 24.dp)
-        ) {
-            Text(text = "Llamar")
-        }
     }
 }
 
 @Composable
-private fun DetailRow(label: String, value: String) {
+private fun DetailRow(
+    label: String,
+    value: String,
+    onClick: (() -> Unit)? = null
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .then(
+                if (onClick != null) Modifier.clickable(onClick = onClick)
+                else Modifier
+            )
             .padding(vertical = 12.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
