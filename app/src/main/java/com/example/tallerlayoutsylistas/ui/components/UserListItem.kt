@@ -10,8 +10,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import com.example.tallerlayoutsylistas.R
 import com.example.tallerlayoutsylistas.data.remote.model.User
 
 @Composable
@@ -25,13 +27,17 @@ fun UserListItem(
         leadingContent = {
             AsyncImage(
                 model = user.image,
-                contentDescription = "Foto de ${user.firstName}",
+                contentDescription = stringResource(R.string.foto_de, user.firstName),
                 modifier = Modifier.size(48.dp)
             )
         },
         headlineContent = {
             Text(
-                text = "${user.firstName} ${user.lastName}",
+                text = stringResource(
+                    R.string.nombre_completo,
+                    user.firstName,
+                    user.lastName
+                ),
                 color = MaterialTheme.colorScheme.primary
             )
         },

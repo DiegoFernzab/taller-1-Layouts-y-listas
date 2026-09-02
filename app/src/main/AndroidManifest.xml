@@ -4,8 +4,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <!-- Android 11+: hay que declarar que queremos consultar apps de teléfono,
-         si no resolveActivity() siempre devuelve null. -->
     <queries>
         <intent>
             <action android:name="android.intent.action.DIAL" />

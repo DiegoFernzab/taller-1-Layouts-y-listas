@@ -18,6 +18,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
@@ -48,7 +49,7 @@ fun App() {
             modifier = Modifier.fillMaxSize(),
             topBar = {
                 TopAppBar(
-                    title = { Text(text = "Usuarios") },
+                    title = { Text(text = stringResource(R.string.usuarios)) },
 
                 )
             }
@@ -60,17 +61,18 @@ fun App() {
 
 @Composable
 fun AppContent(modifier: Modifier = Modifier) {
-    // Estado: la lista que se le pasa a las pantallas. Empieza vacía.
+    val logTag = stringResource(R.string.mainactivity)
+
     var users by remember { mutableStateOf<List<User>>(emptyList()) }
 
-    // Pila de navegación: arranca en la lista. Añadir = ir; quitar = volver.
     val backStack = rememberNavBackStack(ListRoute)
 
-    // Se ejecuta una sola vez y llena el estado con lo que responda la API.
     LaunchedEffect(Unit) {
         KtorApiClient().getUsers()
             .onSuccess { users = it }
-            .onFailure { Log.e("MainActivity", "Error: ${it.message}") }
+            .onFailure { error ->
+                Log.e(logTag, error.message, error)
+            }
     }
 
     NavDisplay(

@@ -8,12 +8,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-//import androidx.compose.foundation.lazy.stickyHeader
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.tallerlayoutsylistas.R
 import com.example.tallerlayoutsylistas.data.remote.model.User
 import com.example.tallerlayoutsylistas.ui.components.UserListItem
 
@@ -25,7 +26,6 @@ fun ListScreen(
     modifier: Modifier = Modifier
 ) {
     LazyColumn(modifier = modifier.fillMaxSize()) {
-        // stickyHeader vive DENTRO del scope de LazyColumn, no es un composable aparte.
         stickyHeader {
             Box(
                 modifier = Modifier
@@ -34,7 +34,7 @@ fun ListScreen(
                     .padding(16.dp)
             ) {
                 Text(
-                    text = "Total usuarios: ${users.size}",
+                    text = stringResource(R.string.total_usuarios, users.size),
                     color = MaterialTheme.colorScheme.onPrimary,
                     style = MaterialTheme.typography.titleMedium
                 )

@@ -20,8 +20,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import com.example.tallerlayoutsylistas.R
 import com.example.tallerlayoutsylistas.data.remote.model.User
 import com.example.tallerlayoutsylistas.util.launchDialer
 
@@ -41,7 +43,7 @@ fun DetailScreen(
     ) {
         AsyncImage(
             model = user.image,
-            contentDescription = "Foto de ${user.firstName}",
+            contentDescription = stringResource(R.string.foto_de, user.firstName),
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .size(140.dp)
@@ -49,23 +51,27 @@ fun DetailScreen(
         )
 
         Text(
-            text = "${user.firstName} ${user.lastName}",
+            text = stringResource(
+                R.string.nombre_completo,
+                user.firstName,
+                user.lastName
+            ),
             style = MaterialTheme.typography.headlineSmall,
             modifier = Modifier.padding(top = 12.dp, bottom = 16.dp)
         )
 
-        DetailRow(label = "Empresa", value = user.company.name)
-        DetailRow(label = "Cargo", value = user.role)
-        DetailRow(label = "Email", value = user.email)
+        DetailRow(label = stringResource(R.string.empresa), value = user.company.name)
+        DetailRow(label = stringResource(R.string.cargo), value = user.role)
+        DetailRow(label = stringResource(R.string.email), value = user.email)
         DetailRow(
-            label = "Teléfono",
+            label = stringResource(R.string.telefono),
             value = user.phone,
             onClick = { launchDialer(context, user.phone) }
         )
-        DetailRow(label = "Género", value = user.gender)
-        DetailRow(label = "Nacimiento", value = user.birthDate)
-        DetailRow(label = "Color de ojos", value = user.eyeColor)
-        DetailRow(label = "Universidad", value = user.university)
+        DetailRow(label = stringResource(R.string.genero), value = user.gender)
+        DetailRow(label = stringResource(R.string.nacimiento), value = user.birthDate)
+        DetailRow(label = stringResource(R.string.color_de_ojos), value = user.eyeColor)
+        DetailRow(label = stringResource(R.string.universidad), value = user.university)
 
     }
 }

@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">Taller#! layouts y listas</string>
+    <string name="usuarios">Usuarios</string>
+    <string name="tel">tel:%1$s</string>
+    <string name="mainactivity">MainActivity</string>
+    <string name="total_usuarios">Total usuarios: %1$d</string>
+    <string name="foto_de">Foto de %1$s</string>
+    <string name="nombre_completo">%1$s %2$s</string>
+    <string name="empresa">Empresa</string>
+    <string name="cargo">Cargo</string>
+    <string name="email">Email</string>
+    <string name="telefono">Teléfono</string>
+    <string name="genero">Género</string>
+    <string name="nacimiento">Nacimiento</string>
+    <string name="color_de_ojos">Color de ojos</string>
+    <string name="universidad">Universidad</string>
 </resources>

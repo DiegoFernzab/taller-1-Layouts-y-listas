@@ -10,7 +10,6 @@ data class User(
     val image: String,
     val phone: String,
     val company: Company,
-    // 6 campos adicionales para la pantalla de detalle
     val gender: String,
     val email: String,
     val birthDate: String,
